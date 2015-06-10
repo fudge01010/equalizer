@@ -1,18 +1,16 @@
 #include "FastLED.h"
-#include "ADC.h"
 
-// LED definitions
+// How many leds in your strip?
 #define NUM_LEDS 84
+
+
 #define DATA_PIN 10
+
+// Define the array of leds
 CRGB leds[NUM_LEDS];
 
-//pin definitions
-#define strobe = 4;         // strobe pins on digital 4
-#define res = 5;            // reset pins on digital 5
-#define leftPin = A0;
-#define rightPin = A1;
-
-
+int strobe = 4;         // strobe pins on digital 4
+int res = 5;            // reset pins on digital 5
 int left[7];            // store band values in these arrays
 int right[7];
 int band;
@@ -24,7 +22,7 @@ int cutOff = 90;        // Cut-off for noise
 void setup()
 {
  FastLED.addLeds<WS2811,DATA_PIN,GRB>(leds, NUM_LEDS);
- ADC *adc = new ADC(); // adc object
+ //Serial.begin(115200);
  pinMode(res, OUTPUT); // reset
  pinMode(strobe, OUTPUT); // strobe
  digitalWrite(res,LOW); // reset low
@@ -39,7 +37,7 @@ void readMSGEQ7()
  {
  digitalWrite(strobe,LOW); // strobe pin on the shield - kicks the IC up to the next band 
  delayMicroseconds(30); // 
- left[band] = adc->analogRead(leftPin);
+ left[band] = analogRead(0); // store left band reading
  //right[band] = analogRead(1); // ... and the right
  digitalWrite(strobe,HIGH); 
  }
@@ -47,24 +45,16 @@ void readMSGEQ7()
 void loop()
 {
  readMSGEQ7();
- // display values of left channel on serial monitor
- for(int i = 0; i < 7; i++)
- {
-    if(left[i] < cutOff){
-        left[i] = 0;
-    }
- }
+ // display values of left channel on serial monitor 
  for (band = 0; band < 7; band++)
  {
    // col = map(left[band], 0, 1023, 0, 255);
    for (int x = 0; x < 12; x++)
    {
-     if (x == 0)
-     {
+     if (x == 0) {
        col = map(left[band], 0, 85, 0, 255);
        //  col = map(left[band], 0, 85 + highOverlap, 0, 255);
-      } else 
-      {
+      } else {
         curr = left[band]
         col = map(left[band], (x * 85) + 1), ((x + 1) * 85), 0, 255);
         // Overlap code

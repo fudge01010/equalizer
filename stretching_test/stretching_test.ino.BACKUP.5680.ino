@@ -6,6 +6,10 @@
 #define DATA_PIN 10
 CRGB leds[NUM_LEDS];
 
+<<<<<<< HEAD
+int strobe = 4;         // strobe pins on digital 4
+int res = 5;            // reset pins on digital 5
+=======
 //pin definitions
 #define strobe = 4;         // strobe pins on digital 4
 #define res = 5;            // reset pins on digital 5
@@ -13,6 +17,7 @@ CRGB leds[NUM_LEDS];
 #define rightPin = A1;
 
 
+>>>>>>> 046bec5c43f1c0ed83af4105eb71d9d8b63ed6ea
 int left[7];            // store band values in these arrays
 int right[7];
 int band;
@@ -63,8 +68,12 @@ void loop()
      {
        col = map(left[band], 0, 85, 0, 255);
        //  col = map(left[band], 0, 85 + highOverlap, 0, 255);
+<<<<<<< HEAD
+      } else {
+=======
       } else 
       {
+>>>>>>> 046bec5c43f1c0ed83af4105eb71d9d8b63ed6ea
         curr = left[band]
         col = map(left[band], (x * 85) + 1), ((x + 1) * 85), 0, 255);
         // Overlap code
