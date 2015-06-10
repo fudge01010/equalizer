@@ -1,16 +1,18 @@
 #include "FastLED.h"
+#include "ADC.h"
 
-// How many leds in your strip?
+// LED definitions
 #define NUM_LEDS 84
-
-
 #define DATA_PIN 10
-
-// Define the array of leds
 CRGB leds[NUM_LEDS];
 
-int strobe = 4;         // strobe pins on digital 4
-int res = 5;            // reset pins on digital 5
+//pin definitions
+#define strobe = 4;         // strobe pins on digital 4
+#define res = 5;            // reset pins on digital 5
+#define leftPin = A0;
+#define rightPin = A1;
+
+
 int left[7];            // store band values in these arrays
 int right[7];
 int band;
@@ -22,7 +24,7 @@ int cutOff = 90;        // Cut-off for noise
 void setup()
 {
  FastLED.addLeds<WS2811,DATA_PIN,GRB>(leds, NUM_LEDS);
- //Serial.begin(115200);
+ ADC *adc = new ADC(); // adc object
  pinMode(res, OUTPUT); // reset
  pinMode(strobe, OUTPUT); // strobe
  digitalWrite(res,LOW); // reset low
@@ -37,7 +39,7 @@ void readMSGEQ7()
  {
  digitalWrite(strobe,LOW); // strobe pin on the shield - kicks the IC up to the next band 
  delayMicroseconds(30); // 
- left[band] = analogRead(0); // store left band reading
+ left[band] = adc->analogRead(leftPin);
  //right[band] = analogRead(1); // ... and the right
  digitalWrite(strobe,HIGH); 
  }
