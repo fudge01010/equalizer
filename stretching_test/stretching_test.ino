@@ -48,8 +48,8 @@ void loop()
  // display values of left channel on serial monitor
  for(int i = 0; i < 7; i++)
  {
-    if(band[i] < cutOff){
-        band[i] = 0;
+    if(left[i] < cutOff){
+        left[i] = 0;
     }
  }
  for (band = 0; band < 7; band++)
