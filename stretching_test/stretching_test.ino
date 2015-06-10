@@ -63,9 +63,8 @@ void loop()
      {
        col = map(left[band], 0, 85, 0, 255);
        //  col = map(left[band], 0, 85 + highOverlap, 0, 255);
-      } else 
-      {
-        curr = left[band]
+     } else 
+     {
         col = map(left[band], (x * 85) + 1), ((x + 1) * 85), 0, 255);
         // Overlap code
         //  col = map(left[band], (x * 85) - lowOverlap + 1), ((x + 1) * 85) + highOverlap, 0, 255);
@@ -74,11 +73,11 @@ void loop()
    }
 //   leds[band*12].setRGB( 0, col , 0);
  }
- FastLED.show();
+  FastLED.show();
  
  
 // display values of right channel on serial monitor
- for (band = 0; band < 7; band++)
+  for (band = 0; band < 7; band++)
  {
    
  }
