@@ -63,7 +63,6 @@ void loop()
        //  col = map(left[band], 0, 85 + highOverlap, 0, 255);
      } else 
      {
-        curr = left[band]
         col = map(left[band], (x * 85) + 1), ((x + 1) * 85), 0, 255);
         // Overlap code
         //  col = map(left[band], (x * 85) - lowOverlap + 1), ((x + 1) * 85) + highOverlap, 0, 255);
