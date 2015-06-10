@@ -9,12 +9,15 @@
 // Define the array of leds
 CRGB leds[NUM_LEDS];
 
-int strobe = 4; // strobe pins on digital 4
-int res = 5; // reset pins on digital 5
-int left[7]; // store band values in these arrays
+int strobe = 4;         // strobe pins on digital 4
+int res = 5;            // reset pins on digital 5
+int left[7];            // store band values in these arrays
 int right[7];
 int band;
 int col;
+int lowOverlap = 20;    // Level of overlap into lower bound from previous
+int hightOverlap = 20;  // Level of overlap into higher bound from next
+int cutOff = 90;        // Cut-off for noise
 
 void setup()
 {
@@ -50,9 +53,13 @@ void loop()
    {
      if (x == 0) {
        col = map(left[band], 0, 85, 0, 255);
+       //  col = map(left[band], 0, 85 + highOverlap, 0, 255);
       } else {
-      col = map(left[band], (x * 85) + 1), ((x + 1) * 85), 0, 255);
-      leds[band * (12 * (x + 1))].setRGB(0, col, 0);
+        curr = left[band]
+        col = map(left[band], (x * 85) + 1), ((x + 1) * 85), 0, 255);
+        // Overlap code
+        //  col = map(left[band], (x * 85) - lowOverlap + 1), ((x + 1) * 85) + highOverlap, 0, 255);
+        leds[((12 * band) + x)].setRGB(0, col, 0);
      }
    }
 //   leds[band*12].setRGB( 0, col , 0);
