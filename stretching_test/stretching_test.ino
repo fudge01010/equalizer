@@ -45,16 +45,24 @@ void readMSGEQ7()
 void loop()
 {
  readMSGEQ7();
- // display values of left channel on serial monitor 
+ // display values of left channel on serial monitor
+ for(int i = 0; i < 7; i++)
+ {
+    if(band[i] < cutOff){
+        band[i] = 0;
+    }
+ }
  for (band = 0; band < 7; band++)
  {
    // col = map(left[band], 0, 1023, 0, 255);
    for (int x = 0; x < 12; x++)
    {
-     if (x == 0) {
+     if (x == 0)
+     {
        col = map(left[band], 0, 85, 0, 255);
        //  col = map(left[band], 0, 85 + highOverlap, 0, 255);
-      } else {
+      } else 
+      {
         curr = left[band]
         col = map(left[band], (x * 85) + 1), ((x + 1) * 85), 0, 255);
         // Overlap code
