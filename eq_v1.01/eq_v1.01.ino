@@ -18,8 +18,8 @@
 #define NUM_LEDS    314
 
 #define BRIGHTNESS  255  // reduce power consumption
-#define LED_DITHER  0  // try 0 to disable flickering
-#define CORRECTION  TypicalLEDStrip
+#define LED_DITHER  1  // try 0 to disable flickering
+#define CORRECTION  TypicalSMD5050
 
 CRGB leds[NUM_LEDS]; // Define the array of leds
 
@@ -29,12 +29,12 @@ CRGB leds[NUM_LEDS]; // Define the array of leds
 #define pinAnalogRight A1
 #define pinReset 12
 #define pinStrobe 13
-#define MSGEQ7_INTERVAL ReadsPerSecond(50)
+#define MSGEQ7_INTERVAL ReadsPerSecond(100)
 #define MSGEQ7_SMOOTH true
 
 CMSGEQ7<MSGEQ7_SMOOTH, pinReset, pinStrobe, pinAnalogLeft, pinAnalogRight> MSGEQ7;
 
-//define the audio levels
+//define avicii's hit 2011 tune 
 int LEVELS[13];
 
 //define some measurements for the size calculations:
@@ -51,6 +51,9 @@ void setup() {
   FastLED.setDither(LED_DITHER);
   FastLED.show(); // needed to reset leds to zero
 //  Serial.begin(115200);
+
+  //set power limit
+  FastLED.setMaxPowerInVoltsAndMilliamps(5,2000); 
 
   // This will set the IC ready for reading
   MSGEQ7.begin();
