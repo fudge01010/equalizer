@@ -1,22 +1,13 @@
 /*
-  Copyright (c) 2014-2016 NicoHood
-  See the readme for credit to other people.
-
-  MSGEQ7 FastLED example
-  Output via Led strip and FastLED library
-
-  Reads MSGEQ7 IC with 7 different frequencies from range 0-255
-  63Hz, 160Hz, 400Hz, 1kHz, 2.5kHz, 6.25KHz, 16kHz
+  HEADER TO ADD LATER
 */
 
 // FastLED
 #include "FastLED.h"
-
-#define LED_PINS    11 // DATA_PIN, or DATA_PIN, CLOCK_PIN
+#define LED_PINS    11 //using ATMEGA328p's fast SPI pin for maximum powaa
 #define COLOR_ORDER GRB
 #define CHIPSET     WS2811 // WS2811 LPD8806
 #define NUM_LEDS    314
-
 #define BRIGHTNESS  255  // reduce power consumption
 #define LED_DITHER  1  // try 0 to disable flickering
 #define CORRECTION  TypicalSMD5050
@@ -29,10 +20,14 @@ CRGB leds[NUM_LEDS]; // Define the array of leds
 #define pinAnalogRight A1
 #define pinReset 12
 #define pinStrobe 13
-#define MSGEQ7_INTERVAL ReadsPerSecond(100)
+#define MSGEQ7_INTERVAL ReadsPerSecond(90)
 #define MSGEQ7_SMOOTH true
 
 CMSGEQ7<MSGEQ7_SMOOTH, pinReset, pinStrobe, pinAnalogLeft, pinAnalogRight> MSGEQ7;
+
+// U8GLIB
+//#include "U8glib.h"
+//U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_DEV_0|U8G_I2C_OPT_NO_ACK|U8G_I2C_OPT_FAST);  // Fast I2C / TWI (A4 and A5)
 
 //define avicii's hit 2011 tune 
 int LEVELS[13];
@@ -41,7 +36,7 @@ int LEVELS[13];
 #define BAND_HEIGHT 24
 #define BANDS 13
 
-int SAT = 200;
+int SAT = 255;
 int HUE = 0;
 
 void setup() {
@@ -50,13 +45,15 @@ void setup() {
   FastLED.setBrightness( BRIGHTNESS );
   FastLED.setDither(LED_DITHER);
   FastLED.show(); // needed to reset leds to zero
-//  Serial.begin(115200);
-
+  
   //set power limit
-  FastLED.setMaxPowerInVoltsAndMilliamps(5,2000); 
-
+  FastLED.setMaxPowerInVoltsAndMilliamps(5,5000); 
+  
   // This will set the IC ready for reading
   MSGEQ7.begin();
+
+  //set params for OLED stuff
+//  u8g_prepare();
 }
 void loop() {
   //roll the hue wheel
@@ -67,9 +64,9 @@ void loop() {
 
   if (newReading)
   {
+//    u8g.firstPage();
     //clear LED's, ready for new data
     FastLED.clear();
-    
     //interpolate levels between channels
     interpolateChannels();
     
@@ -83,13 +80,23 @@ void loop() {
       int m = 0;
       while (j > 255)
       {
-        leds[band*BAND_HEIGHT+m].setHSV(HUE+(15*band),SAT,255);
+        leds[band*BAND_HEIGHT+m].setHSV(HUE+(18*band),SAT,255);
         j = j-255;
         m++;
       }
-      leds[band*BAND_HEIGHT+m].setHSV(HUE+(15*band),SAT,j);
+      leds[band*BAND_HEIGHT+m].setHSV(HUE+(18*band),SAT,j);
     }
+//    String towrite;
+//    char buf[64];
+//    towrite == "";
+//    for (int band=0; band<7; band++)
+//    {
+//      u8g.drawStr(0,band*8,"one");
+//      u8g.nextPage();
+//    }
+
     FastLED.show();
+    
   }
 
   
@@ -143,4 +150,9 @@ void interpolateChannels()
   LEVELS[11]= avg8(LEVELS[10], LEVELS[12]);
 }
 
-
+//void u8g_prepare(void) {
+//  u8g.setFont(u8g_font_6x10);
+//  u8g.setFontRefHeightExtendedText();
+//  u8g.setDefaultForegroundColor();
+//  u8g.setFontPosTop();
+//}
